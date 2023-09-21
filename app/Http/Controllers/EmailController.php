@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class EmailController extends Controller
@@ -27,6 +28,21 @@ class EmailController extends Controller
 
             $startCount = 2;
             $data = [];
+
+
+            $to_name = "RECEIVER_NAME";
+            $to_email = "ankit@yopmail.com";
+            $data = array("name" => "Ogbonna Vitalis(sender_name)", "body" => "A test mail");
+
+            Mail::send(
+                "emails.mail",
+                $data,
+                function ($message) use ($to_name, $to_email) {
+                    $message->to($to_email, $to_name)
+                        ->subject("Laravel Test Mail");
+                    $message->from(env('MAIL_FROM_ADDRESS'), "Test Mail");
+                }
+            );
 
             foreach ($row_range as $row) {
                 $data[] = [
